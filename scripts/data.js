@@ -20,12 +20,14 @@ APP.Data = (function() {
   var HN_TOPSTORIES_URL = HN_API_BASE + '/v0/topstories.json';
   var HN_STORYDETAILS_URL = HN_API_BASE + '/v0/item/[ID].json';
 
+  //this returns an array with the top story-id's 
   function getTopStories(callback) {
     request(HN_TOPSTORIES_URL, function(evt) {
       callback(evt.target.response);
     });
   }
 
+  //this returns the actuall story (content, writer, ...)
   function getStoryById(id, callback) {
 
     var storyURL = HN_STORYDETAILS_URL.replace(/\[ID\]/, id);
