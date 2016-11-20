@@ -62,27 +62,19 @@ APP.Main = (function() {
    * probably in a requestAnimationFrame callback.
    */
   function onStoryData (key, details) {
-
     // This seems odd. Surely we could just select the story
     // directly rather than looping through all of them.
-    var storyElements = document.querySelectorAll('.story');
+    
+    var story = document.querySelector('#s-' + key);
+    details.time *= 1000;
+    var html = storyTemplate(details);
+    story.innerHTML = html;
+    story.addEventListener('click', onStoryClick.bind(this, details));
+    story.classList.add('clickable');
 
-    for (var i = 0; i < storyElements.length; i++) {
+    // Tick down. When zero we can batch in the next load.
+    storyLoadCount--;
 
-      if (storyElements[i].getAttribute('id') === 's-' + key) {
-
-        details.time *= 1000;
-        var story = storyElements[i];
-        var html = storyTemplate(details);
-        story.innerHTML = html;
-        story.addEventListener('click', onStoryClick.bind(this, details));
-        story.classList.add('clickable');
-
-        // Tick down. When zero we can batch in the next load.
-        storyLoadCount--;
-
-      }
-    }
 
     // Colorize on complete.
     if (storyLoadCount === 0)
@@ -323,10 +315,12 @@ APP.Main = (function() {
 
   function loadStoryBatch() {
 
+    //if the app is still loading a previous batch of stories, then return
     if (storyLoadCount > 0)
       return;
 
     storyLoadCount = count;
+    //window.performance.mark("mark_start_frame");
 
     var end = storyStart + count;
     for (var i = storyStart; i < end; i++) {
