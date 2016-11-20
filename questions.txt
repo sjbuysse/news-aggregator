@@ -1,0 +1,6 @@
+1. when we run loadStoryBatch(), and we run main.appendChild(story), does that trigger a style event? 
+if so, why does it only generate 1 style, layout and paint event for the whole batch, after the whole XHR Load event callback (app.js:351) has executed? 
+
+Also, if the appenChild function was triggering a style event, shouldn't we use rAF as well when we run loadBatch()? 
+
+Same question for filling in the details of the stories. onStoryData() should fill in the details and add the story to main. In other words it should trigger a style event, but it only does so after a couple of those onStoryData(). Is this because it is missing frames? That seems like an awefull lot of frames that it's missing, and wouldn't it still try to execute the style event as soon as we run methods like .innerHTML = ? 
